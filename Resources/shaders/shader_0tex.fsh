@@ -1,6 +1,5 @@
-varying vec4 v_color;      //(入力)色
+varying vec4 v_color;
 
 void main(){
-     //シェーダの出力にRGBAでカラーを設定
 	 gl_FragColor=v_color;
 	 }
