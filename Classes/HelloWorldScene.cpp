@@ -102,42 +102,95 @@ bool HelloWorld::init()
 	}
 
 	// add "HelloWorld" splash screen"
-	//auto sprite = Sprite::create("HelloWorld.png");
-	//if (sprite == nullptr)
-	//{
-	//	problemLoading("'HelloWorld.png'");
-	//}
-	//else
-	//{
-	//	// position the sprite on the center of the screen
-	//	sprite->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
+	auto sprite = Sprite::create("HelloWorld.png");
+	if (sprite == nullptr)
+	{
+		problemLoading("'HelloWorld.png'");
+	}
+	else
+	{
+		// position the sprite on the center of the screen
+		sprite->setPosition(Vec2(visibleSize.width / 2 + origin.x, visibleSize.height / 2 + origin.y));
 
-	//	// add the sprite as a child to this layer
-	//	this->addChild(sprite, 0);
-	//}
+		// add the sprite as a child to this layer
+		this->addChild(sprite, 0);
+	}
 
-	// OpenGLのエラーコードを受ける変数
 	GLenum error;
-	m_pProgram = new GLProgram;
-	// シェーダをテキストファイルから読みこんでコンパイル
-	m_pProgram->initWithFilenames("shaders/shader_0tex.vsh", "shaders/shader_0tex.fsh");
-	error = glGetError();
-	// attribute変数に属性インデックスを割り振る
-	m_pProgram->bindAttribLocation("a_position", GLProgram::VERTEX_ATTRIB_POSITION);
-	error = glGetError();
-	// attribute変数に属性インデックスを割り振る
-	m_pProgram->bindAttribLocation("a_color", GLProgram::VERTEX_ATTRIB_COLOR);
-	error = glGetError();
-	// シェーダーをリンク
-	m_pProgram->link();
-	error = glGetError();
-	// uniform変数のリストを保存
-	m_pProgram->updateUniforms();
-	error = glGetError();
 
-	Director::getInstance()->setClearColor(Color4F(0, 0, 0, 0));
+	m_pProgram = new GLProgram;
+	m_pProgram->initWithFilenames("shaders/shader_0tex.vsh", "shaders/shader_0tex.fsh");
+
+	m_pProgram->bindAttribLocation("a_position", GLProgram::VERTEX_ATTRIB_POSITION);
+	m_pProgram->bindAttribLocation("a_color", GLProgram::VERTEX_ATTRIB_COLOR);
+
+	m_pProgram->link();
+
+	m_pProgram->updateUniforms();
+
+	// 背景色の指定
+	Director::getInstance()->setClearColor(Color4F(0, 1, 0, 0));
 
 	return true;
+}
+
+void HelloWorld::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
+{
+	// 減算合成
+	//glBlendEquation(GL_FUNC_REVERSE_SUBTRACT);
+	//glBlendFunc(GL_ONE, GL_ONE);
+
+	// 半透明合成
+	GL::blendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	GL::enableVertexAttribs(GL::VERTEX_ATTRIB_FLAG_POSITION | GL::VERTEX_ATTRIB_FLAG_COLOR);
+	m_pProgram->use();
+
+	Vec3 pos[4];
+	Vec4 color[4];
+
+	const float x = 0.7f;
+	const float y = 0.7f;
+	// 三角形１つめ
+	pos[0] = Vec3(-x, -y, 0);
+	pos[1] = Vec3(-x, y, 0);
+	pos[2] = Vec3(x, -y, 0);
+	// 三角形２つめ
+	pos[3] = Vec3(x, y, 0);
+
+	//color[0] = Vec3(0, 0, 0); // 黒
+	//color[1] = Vec3(1, 0, 0); // 赤
+	//color[2] = Vec3(0, 1, 0); // 緑
+	//color[3] = Vec3(0, 0, 1); // 青
+
+	float red = 1.0f;
+	float green = 0.0f;
+	float blue = 0.0f;
+
+	color[0] = Vec4(1, 0, 0, 1);
+	color[1] = Vec4(1, 0, 0, 1);
+	color[2] = Vec4(1, 0, 0, 1);
+	color[3] = Vec4(1, 0, 0, 1);
+
+	glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_POSITION, 3, GL_FLOAT, GL_FALSE, 0, pos);
+	glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_COLOR, 4, GL_FLOAT, GL_FALSE, 0, color);
+	//            図形         先頭番号　頂点数
+	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+
+	// 青四角形の描画
+	pos[0].x += 0.1f; pos[0].y += 0.1f;
+	pos[1].x += 0.1f; pos[1].y += 0.1f;
+	pos[2].x += 0.1f; pos[2].y += 0.1f;
+	pos[3].x += 0.1f; pos[3].y += 0.1f;
+
+	color[0] = Vec4(0, 0, 1, 0.2f);
+	color[1] = Vec4(0, 0, 1, 0.2f);
+	color[2] = Vec4(0, 0, 1, 0.2f);
+	color[3] = Vec4(0, 0, 1, 0.2f);
+
+	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+
+	glBlendEquation(GL_FUNC_ADD);
 }
 
 
@@ -152,74 +205,4 @@ void HelloWorld::menuCloseCallback(Ref* pSender)
 	//_eventDispatcher->dispatchEvent(&customEndEvent);
 
 
-}
-
-void HelloWorld::draw(Renderer *renderer, const Mat4&transform, uint32_t flags) {
-	// 合成なし（上書き描画）
-	//glBlendFunc(GL_ONE, GL_ZERO);
-
-	// 加算合成
-	//glBlendFunc(GL_ONE, GL_ONE);
-
-	GLenum error;
-	// 指定したフラグに対応する属性インデックスだけを有効にして、他は無効にする
-	GL::enableVertexAttribs(GL::VERTEX_ATTRIB_FLAG_POSITION | GL::VERTEX_ATTRIB_FLAG_COLOR);
-	error = glGetError();
-	//シェーダを有効化する
-	m_pProgram->use();
-	error = glGetError();
-
-	//四角形の4頂点分の座標
-	Vec3 pos[4];
-	Vec4 color[4];
-	const float x = 0.5f;
-	const float y = 0.5f;
-
-	float a = 0.0f;
-	for (int i = 0; i < 10; i++) {
-	//座標を1点ずつ設定
-	pos[0] = Vec3(-x+a, -y+a, 0);
-	pos[1] = Vec3(-x+a, y+a, 0);
-	pos[2] = Vec3(x+a, -y+a, 0);
-	pos[3] = Vec3(x+a, y+a, 0);
-	//カラーを一点ずつ設定
-	color[0] = Vec4(0.0f, 0, 0, 0.5f); //黒
-	color[1] = Vec4(0.0f, 0, 0,0.5f); //赤
-	color[2] = Vec4(0.0f, 0, 0, 0.5f); //緑
-	color[3] = Vec4(1.0f, 0, 0, 0.5f); //青
-	//指定した属性インデックスに、データを関連付ける
-	glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_POSITION, 3, GL_FLOAT, GL_FALSE, 0, pos);
-	//指定した属性インデックスに、データを関連付ける
-	glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_COLOR, 4, GL_FLOAT, GL_FALSE, 0, color);
-	error = glGetError();
-	
-		//4頂点分のデータで4角形を描画する
-		glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-		a += 0.1f;
-	}
-
-	Vec3 pos1[4];
-	Vec4 color1[4];
-
-	pos1[0] = Vec3(-x+0.1f, -y, 0);
-	pos1[1] = Vec3(-x+0.1f, y, 0);
-	pos1[2] = Vec3(x+0.1f, -y, 0);
-	pos1[3] = Vec3(x+0.1f, y, 0);
-
-	color1[0] = Vec4(0, 0, 1.0f, 0.5f); //黒
-	color1[1] = Vec4(0, 0, 1.0f, 0.5f); //赤
-	color1[2] = Vec4(0, 0, 1.0f, 0.5f); //緑
-	color1[3] = Vec4(0, 0, 1.0f, 0.5f); //青
-
-	//指定した属性インデックスに、データを関連付ける
-	glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_POSITION, 3, GL_FLOAT, GL_FALSE, 0, pos1);
-	//指定した属性インデックスに、データを関連付ける
-	glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_COLOR, 4, GL_FLOAT, GL_FALSE, 0, color1);
-	error = glGetError();
-	//4頂点分のデータで4角形を描画する
-	//glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-
-	
-
-	error = glGetError();
 }

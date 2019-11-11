@@ -1,4 +1,4 @@
-/****************************************************************************
+﻿/****************************************************************************
  Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
  
  http://www.cocos2d-x.org
@@ -30,19 +30,19 @@
 class HelloWorld : public cocos2d::Scene
 {
 public:
-    static cocos2d::Scene* createScene();
+	static cocos2d::Scene* createScene();
 
-    virtual bool init();
-    
-    // a selector callback
-    void menuCloseCallback(cocos2d::Ref* pSender);
-    
-    // implement the "static create()" method manually
-    CREATE_FUNC(HelloWorld);
+	virtual bool init();
 
-	// �֐��錾
-	void draw(cocos2d::Renderer *renderer, const cocos2d::Mat4& transform, uint32_t flags);
-	// �ϐ��錾
+	// a selector callback
+	void menuCloseCallback(cocos2d::Ref* pSender);
+
+	// implement the "static create()" method manually
+	CREATE_FUNC(HelloWorld);
+
+	// ŠÖ”éŒ¾
+	void draw(cocos2d::Renderer* renderer, const cocos2d::Mat4& transform, uint32_t flags);
+	// •Ï”éŒ¾
 	cocos2d::GLProgram* m_pProgram;
 };
 
