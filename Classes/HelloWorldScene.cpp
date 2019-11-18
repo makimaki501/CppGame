@@ -138,7 +138,7 @@ bool HelloWorld::init()
 	uniform_wvp_matrix = glGetUniformLocation(m_pProgram->getProgram(), "u_wvp_matrix");
 
 	// 背景色の指定
-	Director::getInstance()->setClearColor(Color4F(0, 0, 0, 0));
+	Director::getInstance()->setClearColor(Color4F(0, 150, 0, 0));
 
 	return true;
 }
@@ -157,11 +157,7 @@ void HelloWorld::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 	Vec4 color[4];
 	const float x = 50.0f;
 	const float y = 50.0f;
-	//座標を1点ずつ設定
-	pos[0] = Vec3(-x, -y, 0);
-	pos[1] = Vec3(-x, y, 0);
-	pos[2] = Vec3(x, -y, 0);
-	pos[3] = Vec3(x, y, 0);
+	const float z = 50.0f;
 	//カラーを1点ずつ設定
 	color[0] = Vec4(1, 0, 0, 1);
 	color[1] = Vec4(1, 0, 0, 1);
@@ -174,7 +170,9 @@ void HelloWorld::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 
 	//ワールドビュープロジェクション行列の作成
 	static float yaw = 0.0f;
-	yaw += 0.01f;
+	//120frmで1周
+	yaw += CC_DEGREES_TO_RADIANS(1.0f);
+	//counter++;
 	Mat4 matProjection;
 	Mat4 matView;
 	Mat4 matWVP;
@@ -185,19 +183,69 @@ void HelloWorld::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 	matView = _director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_MODELVIEW);
 
 	//平行移動行列を作成
-	Mat4::createTranslation(Vec3(250, 50, 0), &matTrans);
+	Mat4::createTranslation(Vec3(1280 / 2, 720 / 2, -200), &matTrans);
 	//回転行列を作成
 	Mat4::createRotationY(yaw, &matRot);
 	//スケーリング行列を作成
-	Mat4::createScale(Vec3(1, 1, 1), &matSclae);
+	//120frmで周期が1周
+	float scale = CC_DEGREES_TO_RADIANS(3.0f * counter);
+	//引数をラジアンにとしてサイン関数(6.28ぐらいで一周)
+	scale = sinf(scale) + 2.0f;
+	Mat4::createScale(Vec3(scale, scale, scale), &matSclae);
 	//ワールド行列を合成
 	matWorld = matTrans * matRot * matSclae;
 	//WVP行列を合成
 	matWVP = matProjection * matView * matWorld;
+
+	//座標を1点ずつ設定
+	//1枚目(手前)
+	pos[0] = Vec3(-x, -y, z);
+	pos[1] = Vec3(-x, y, z);
+	pos[2] = Vec3(x, -y, z);
+	pos[3] = Vec3(x, y, z);
 	//合成したWVP行列をシェーダに送る
 	glUniformMatrix4fv(uniform_wvp_matrix, 1, GL_FALSE, matWVP.m);
-
 	//            図形         先頭番号　頂点数
+	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+
+	//2枚目(奥)
+	pos[0] = Vec3(-x, -y, -z);
+	pos[1] = Vec3(-x,  y, -z);
+	pos[2] = Vec3( x, -y, -z);
+	pos[3] = Vec3( x,  y, -z);
+	glUniformMatrix4fv(uniform_wvp_matrix, 1, GL_FALSE, matWVP.m);
+	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+
+	//3枚目(右)
+	pos[0] = Vec3(x, -y, z);
+	pos[1] = Vec3(x, y, z);
+	pos[2] = Vec3(x, -y, -z);
+	pos[3] = Vec3(x,  y,  -z);
+	glUniformMatrix4fv(uniform_wvp_matrix, 1, GL_FALSE, matWVP.m);
+	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+
+	//4枚目(左)
+	pos[0] = Vec3(-x, -y, z);
+	pos[1] = Vec3(-x, y, z);
+	pos[2] = Vec3(-x,  -y, -z);
+	pos[3] = Vec3(-x, y,  -z);
+	glUniformMatrix4fv(uniform_wvp_matrix, 1, GL_FALSE, matWVP.m);
+	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+
+	//5枚目(上)
+	pos[0] = Vec3(-x,  y,  z);
+	pos[1] = Vec3( -x,  y,  -z);
+	pos[2] = Vec3( x,  y, z);
+	pos[3] = Vec3(x,  y, -z);
+	glUniformMatrix4fv(uniform_wvp_matrix, 1, GL_FALSE, matWVP.m);
+	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+
+	//6枚目(下)
+	pos[0] = Vec3(-x, -y,  z);
+	pos[1] = Vec3( x, -y,  z);
+	pos[2] = Vec3( x, -y, -z);
+	pos[3] = Vec3(-x, -y, -z);
+	glUniformMatrix4fv(uniform_wvp_matrix, 1, GL_FALSE, matWVP.m);
 	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 }
 
