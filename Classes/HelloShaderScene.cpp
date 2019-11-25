@@ -1,6 +1,5 @@
-
 #include "HelloShaderScene.h"
-#include "HelloWorldScene.h"
+#include"SharderNode.h"
 
 USING_NS_CC;
 
@@ -76,21 +75,41 @@ bool HelloShader::init()
 	sprite->setPosition(Vec2(visibleSize.width / 2 + origin.x + 200, visibleSize.height / 2 + origin.y));
 	this->addChild(sprite, 0);
 
-	LayerColor*layerColor = LayerColor::create(Color4B(255, 255, 0, 255), 500, 500);
-	this->addChild(layerColor, 3);
+	//// LayerColorの使用例
+	//LayerColor* layerColor = LayerColor::create(Color4B(255, 255, 0, 255), 500, 500);
+	//this->addChild(layerColor, 2);
 
 	// HelloWorldのレイヤーを作成。描画優先は1
-	Scene* scene = HelloWorld::create();
-	this->addChild(scene, 1);
+	node = ShaderNode::create();
+	node->setPosition(Vec2(640, 360));
+	//node->setRotation(45);
+	//node->setScale(3.0f);
+	//node->setFlippedX(true);
+	//node->setVisible(false);
+	//node->setColor(Color3B(255, 0, 0));
+	//node->setOpacity(10);
+	// 表示サイズを指定
+	node->setContentSize(Size(200, 200));
+	this->addChild(node, 1);
 
-	Sprite* spriteA;
-	Sprite* spriteB;
-	Sprite* spriteC;
+	RotateBy* action = RotateBy::create(10, 360 * 10);
+	node->runAction(action);
 
-	// layerにSpriteA,B,Cをぶら下げる
+	Sprite* spriteA = Sprite::create("HelloWorld.png");
+	//Sprite* spriteB;
+	//Sprite* spriteC;
+
+	//// layerにSpriteA,B,Cをぶら下げる
 	//scene->addChild(spriteA, 2);
 	//scene->addChild(spriteB, 0);
 	//scene->addChild(spriteC, 1);
+
+	EventListenerTouchOneByOne* listener = EventListenerTouchOneByOne::create();
+	listener->onTouchBegan = CC_CALLBACK_2(HelloShader::onTouchBegan, this);
+	listener->onTouchMoved = CC_CALLBACK_2(HelloShader::onTouchMoved, this);
+	listener->onTouchEnded = CC_CALLBACK_2(HelloShader::onTouchEnded, this);
+	listener->onTouchCancelled = CC_CALLBACK_2(HelloShader::onTouchEnded, this);
+	getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, this);
 
 	return true;
 }
@@ -102,4 +121,22 @@ void HelloShader::menuCloseCallback(Ref* pSender)
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 	exit(0);
 #endif
+}
+
+bool HelloShader::onTouchBegan(Touch* touch, Event*)
+{
+	node->setPosition(touch->getLocation());
+
+	return true;
+}
+
+void HelloShader::onTouchMoved(Touch* touch, Event*)
+{
+	node->setPosition(touch->getLocation());
+
+}
+
+void HelloShader::onTouchEnded(Touch* touch, Event*)
+{
+
 }
