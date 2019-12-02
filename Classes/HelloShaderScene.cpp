@@ -75,19 +75,9 @@ bool HelloShader::init()
 	sprite->setPosition(Vec2(visibleSize.width / 2 + origin.x + 200, visibleSize.height / 2 + origin.y));
 	this->addChild(sprite, 0);
 
-	//// LayerColorの使用例
-	//LayerColor* layerColor = LayerColor::create(Color4B(255, 255, 0, 255), 500, 500);
-	//this->addChild(layerColor, 2);
-
 	// HelloWorldのレイヤーを作成。描画優先は1
 	node = ShaderNode::create();
 	node->setPosition(Vec2(640, 360));
-	//node->setRotation(45);
-	//node->setScale(3.0f);
-	//node->setFlippedX(true);
-	//node->setVisible(false);
-	//node->setColor(Color3B(255, 0, 0));
-	//node->setOpacity(128);
 	// 表示サイズを指定
 	node->setContentSize(Size(1280, 720));
 	this->addChild(node, 1);
@@ -96,13 +86,6 @@ bool HelloShader::init()
 	//node->runAction(action);
 
 	Sprite* spriteA = Sprite::create("HelloWorld.png");
-	//Sprite* spriteB;
-	//Sprite* spriteC;
-
-	//// layerにSpriteA,B,Cをぶら下げる
-	//scene->addChild(spriteA, 2);
-	//scene->addChild(spriteB, 0);
-	//scene->addChild(spriteC, 1);
 
 	EventListenerTouchOneByOne* listener = EventListenerTouchOneByOne::create();
 	listener->onTouchBegan = CC_CALLBACK_2(HelloShader::onTouchBegan, this);
