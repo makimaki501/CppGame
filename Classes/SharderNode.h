@@ -26,6 +26,7 @@ public:
 	int uniform_wvp_matrix;
 
 	int uniform_center;
+	int uniform_size;
 
 	cocos2d::Texture2D* m_pTexture;
 

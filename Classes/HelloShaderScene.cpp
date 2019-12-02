@@ -79,7 +79,7 @@ bool HelloShader::init()
 	node = ShaderNode::create();
 	node->setPosition(Vec2(640, 360));
 	// 表示サイズを指定
-	node->setContentSize(Size(1280, 720));
+	node->setContentSize(Size(500, 500));
 	this->addChild(node, 1);
 
 	RotateBy* action = RotateBy::create(10, 360 * 10);
