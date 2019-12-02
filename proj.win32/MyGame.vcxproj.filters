@@ -40,4 +40,8 @@
       <Filter>resource</Filter>
     </ResourceCompile>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Resources\shaders\flower.fsh" />
+    <None Include="..\Resources\shaders\flower.vsh" />
+  </ItemGroup>
 </Project>

@@ -31,7 +31,7 @@ bool ShaderNode::init()
 	GLenum error;
 
 	m_pProgram = new GLProgram;
-	m_pProgram->initWithFilenames("shaders/shader_0tex.vsh", "shaders/shader_0tex.fsh");
+	m_pProgram->initWithFilenames("shaders/flower.vsh", "shaders/flower.fsh");
 
 	m_pProgram->bindAttribLocation("a_position", GLProgram::VERTEX_ATTRIB_POSITION);
 	m_pProgram->bindAttribLocation("a_color", GLProgram::VERTEX_ATTRIB_COLOR);
@@ -47,7 +47,7 @@ bool ShaderNode::init()
 	m_pTexture = Director::getInstance()->getTextureCache()->addImage("texture.jpg");
 
 	// ”wŒiF‚ÌŽw’è
-	Director::getInstance()->setClearColor(Color4F(0, 1, 0, 0));
+	Director::getInstance()->setClearColor(Color4F(0,0, 0, 0));
 
 	counter = 0;
 

@@ -82,19 +82,18 @@ bool HelloShader::init()
 	// HelloWorldのレイヤーを作成。描画優先は1
 	node = ShaderNode::create();
 	node->setPosition(Vec2(640, 360));
-	node->setColor();
 	//node->setRotation(45);
 	//node->setScale(3.0f);
 	//node->setFlippedX(true);
 	//node->setVisible(false);
 	//node->setColor(Color3B(255, 0, 0));
-	//node->setOpacity(10);
+	//node->setOpacity(128);
 	// 表示サイズを指定
-	node->setContentSize(Size(200, 200));
+	node->setContentSize(Size(1280, 100));
 	this->addChild(node, 1);
 
 	RotateBy* action = RotateBy::create(10, 360 * 10);
-	node->runAction(action);
+	//node->runAction(action);
 
 	Sprite* spriteA = Sprite::create("HelloWorld.png");
 	//Sprite* spriteB;
