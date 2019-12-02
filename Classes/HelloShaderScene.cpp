@@ -82,6 +82,7 @@ bool HelloShader::init()
 	// HelloWorld‚ÌƒŒƒCƒ„[‚ðì¬B•`‰æ—Dæ‚Í1
 	node = ShaderNode::create();
 	node->setPosition(Vec2(640, 360));
+	node->setColor();
 	//node->setRotation(45);
 	//node->setScale(3.0f);
 	//node->setFlippedX(true);
