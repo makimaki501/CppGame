@@ -44,13 +44,15 @@ bool ShaderNode::init()
 	uniform_center = glGetUniformLocation(m_pProgram->getProgram(), "center");
 	uniform_size = glGetUniformLocation(m_pProgram->getProgram(), "u_size");
 
+	uniform_time= glGetUniformLocation(m_pProgram->getProgram(), "time");
+
 	//uniform_sampler = glGetUniformLocation(m_pProgram->getProgram(), "sampler");
 	uniform_wvp_matrix = glGetUniformLocation(m_pProgram->getProgram(), "u_wvp_matrix");
 
 	m_pTexture = Director::getInstance()->getTextureCache()->addImage("texture.jpg");
 
 	// ”wŒiF‚ÌŽw’è
-	Director::getInstance()->setClearColor(Color4F(0, 0.0f, 0.0f, 0));
+	Director::getInstance()->setClearColor(Color4F(1.0f, 1.0f, 1.0f, 0));
 
 	counter = 0;
 
@@ -91,14 +93,21 @@ void ShaderNode::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 	// ‚Q‚c‚ÌÀ•WŒn‚É•ÏŠ·
 	matProjection = _director->getMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
 	matWVP = matProjection * transform;
+
+	//‹N“®‚©‚ç‚ÌŒo‰ßƒtƒŒ[ƒ€”‚ðŽæ“¾
+	unsigned int total = _director->getTotalFrames();
+	//ƒtƒŒ[ƒ€“–‚½‚è‚Ì•b”(0.16666667=1/60)‚ðŽæ“¾
+	float inter = _director->getAnimationInterval();
+	//‹N“®‚©‚ç‚ÌŒo‰ß•b”
+	m_time = total * inter;
 }
 
 void ShaderNode::onDraw(const Mat4& transform, uint32_t /*flags*/)
 {
 	// ”¼“§–¾
-	//GL::blendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	GL::blendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	//‰ÁŽZ
-	GL::blendFunc(GL_ONE, GL_ONE);
+	//GL::blendFunc(GL_ONE, GL_ONE);
 
 	//GL::enableVertexAttribs(GL::VERTEX_ATTRIB_FLAG_POSITION | GL::VERTEX_ATTRIB_FLAG_COLOR | GL::VERTEX_ATTRIB_FLAG_TEX_COORD);
 	GL::enableVertexAttribs(GL::VERTEX_ATTRIB_FLAG_POSITION | GL::VERTEX_ATTRIB_FLAG_COLOR);
@@ -117,6 +126,7 @@ void ShaderNode::onDraw(const Mat4& transform, uint32_t /*flags*/)
 	glUniform2f(uniform_center, pos.x, pos.y);
 	Vec2 size = this->getContentSize();
 	glUniform2f(uniform_size,size.x/2 ,size.y/2);
+	glUniform1f(uniform_time, m_time);
 
 	// ‚S’¸“_‚Å‚Ì•`‰æ
 	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);

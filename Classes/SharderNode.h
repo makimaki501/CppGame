@@ -27,6 +27,8 @@ public:
 
 	int uniform_center;
 	int uniform_size;
+	float uniform_time;
+	float m_time;
 
 	cocos2d::Texture2D* m_pTexture;
 
