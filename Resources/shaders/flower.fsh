@@ -6,8 +6,9 @@ uniform float time;
 
 
 void main(){
-     vec2 p=gl_FragCoord.xy-center;
-	 float w=sin(time*3.14-p.x*3.14);
+      vec2 p=gl_FragCoord.xy-center;
+	 float angle =atan(p.y,p.x);
+	 float w=sin(time*3.14-angle);
 
 	 float col=(w/2.0+0.5)*255;
 	 
