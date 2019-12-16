@@ -6,11 +6,15 @@ uniform float time;
 
 
 void main(){
-      vec2 p=gl_FragCoord.xy-center;
+     vec2 p=gl_FragCoord.xy-center;
 	 float angle =atan(p.y,p.x);
-	 float w=sin(time*3.14-angle);
+	 float w=sin(time*3.14);
+	 float len=length(p);
+     float deg=degrees(angle);
+     deg=abs(deg);
 
-	 float col=(w/2.0+0.5)*255;
+	 w=abs(w);
+	 float col=255-(55*w)-len;
 	 
 	 gl_FragColor=vec4(col/u_size.x,col/u_size.y,col/u_size.x,1);
 	 //â©êF
