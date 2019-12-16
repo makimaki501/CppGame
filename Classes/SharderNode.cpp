@@ -50,7 +50,7 @@ bool ShaderNode::init()
 	m_pTexture = Director::getInstance()->getTextureCache()->addImage("texture.jpg");
 
 	// ”wŒiF‚ÌŽw’è
-	Director::getInstance()->setClearColor(Color4F(0, 1.0f, 1.0f, 0));
+	Director::getInstance()->setClearColor(Color4F(0, 0.0f, 0.0f, 0));
 
 	counter = 0;
 
@@ -97,6 +97,8 @@ void ShaderNode::onDraw(const Mat4& transform, uint32_t /*flags*/)
 {
 	// ”¼“§–¾
 	GL::blendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	//‰ÁŽZ
+	//GL::blendFunc(GL_ONE, GL_ONE);
 
 	//GL::enableVertexAttribs(GL::VERTEX_ATTRIB_FLAG_POSITION | GL::VERTEX_ATTRIB_FLAG_COLOR | GL::VERTEX_ATTRIB_FLAG_TEX_COORD);
 	GL::enableVertexAttribs(GL::VERTEX_ATTRIB_FLAG_POSITION | GL::VERTEX_ATTRIB_FLAG_COLOR);

@@ -12,7 +12,10 @@ void main(){
 
      float col=len;
 
-	 //col=255.0-col;
+	 col=250.0-col;
+
+	 //col=sign(1)*250;
+	 col=step(0.01,col)*255;
 
 	 gl_FragColor=vec4(col/u_size.x,col/u_size.y,col/u_size.x,1);
      //gl_FragColor*=v_color;
