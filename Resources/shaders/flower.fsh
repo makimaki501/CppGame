@@ -1,25 +1,43 @@
+//(入力)色
 varying vec4 v_color;
+
+//(入力)図形の中心座標
 uniform vec2 center;
 uniform vec2 u_size;
 //経過秒数
 uniform float time;
 
+//0より大きければ1を返す。
+//sign関数に近いが、マイナス時も0を返す
+float u(float x)
+{
+   return (x>0.0)?1.0:0.0;
+}
 
-void main(){
+
+void main(void){
      vec2 p=gl_FragCoord.xy-center;
-	 float angle =atan(p.y,p.x);
-	 float w=sin(time*3.14);
-	 float len=length(p);
-     float deg=degrees(angle);
-     deg=abs(deg);
+	 p/=u_size;
 
-	 w=abs(w);
-	 float col=255-(55*w)-len;
-	 
-	 gl_FragColor=vec4(col/u_size.x,col/u_size.y,col/u_size.x,1);
-	 //黄色
-	 //gl_FragColor=vec4(1,1,0,1);
+	 float a =atan(p.x,p.y);
 
-     //gl_FragColor*=v_color;
+	 float r=length(p);
+
+	 float w=cos(3.14*time-r*2.0);
+
+	 float h=0.5+0.5*cos(2.0*a-w*28.0+r*8.0);
+
+	 float d =0.25+0.75*pow(h,1.0*r)*(0.7+0.3*w);
+
+	 float col =u(d-r)*sqrt(1.0-r/d)*r*2.5;
+
+	 col*=1.25+0.25*cos((12.0*a-w*7.0+r*8.0)/2.0);
+	 col*=1.0-0.35*(0.5+0.5*sin(r*30.0))*(0.5+0.5*cos(12.0*a-w*7.0+r*8.0));
+
+	 gl_FragColor=vec4(
+	 col,
+	 col-h*0.5+r*0.2,
+	 col-h*r+0.1*h*(1.0-r),
+	 1.0);
 }
 	 
