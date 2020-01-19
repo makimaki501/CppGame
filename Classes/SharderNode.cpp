@@ -125,7 +125,7 @@ void ShaderNode::onDraw(const Mat4& transform, uint32_t /*flags*/)
 	Vec2 pos = this->getPosition();
 	glUniform2f(uniform_center, pos.x, pos.y);
 	Vec2 size = this->getContentSize();
-	glUniform2f(uniform_size,size.x/2 ,size.y/2);
+	glUniform2f(uniform_size,size.x ,size.y);
 	glUniform1f(uniform_time, m_time);
 
 	// ‚S’¸“_‚Å‚Ì•`‰æ

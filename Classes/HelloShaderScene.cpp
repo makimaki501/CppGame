@@ -79,7 +79,7 @@ bool HelloShader::init()
 	node = ShaderNode::create();
 	node->setPosition(Vec2(640, 360));
 	// 表示サイズを指定
-	node->setContentSize(Size(500, 500));
+	node->setContentSize(Size(1280, 1280));
 	this->addChild(node, 1);
 
 	RotateBy* action = RotateBy::create(10, 360 * 10);
@@ -108,14 +108,14 @@ void HelloShader::menuCloseCallback(Ref* pSender)
 
 bool HelloShader::onTouchBegan(Touch* touch, Event*)
 {
-	node->setPosition(touch->getLocation());
+	//node->setPosition(touch->getLocation());
 
 	return true;
 }
 
 void HelloShader::onTouchMoved(Touch* touch, Event*)
 {
-	node->setPosition(touch->getLocation());
+	//node->setPosition(touch->getLocation());
 
 }
 
