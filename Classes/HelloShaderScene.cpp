@@ -76,11 +76,31 @@ bool HelloShader::init()
 	//this->addChild(sprite, 0);
 
 	// HelloWorldのレイヤーを作成。描画優先は1
-	node = ShaderNode::create();
-	node->setPosition(Vec2(640, 360));
-	// 表示サイズを指定
-	node->setContentSize(Size(1280, 1280));
-	this->addChild(node, 1);
+	//node = ShaderNode::create();
+	//node->setPosition(Vec2(640, 360));
+	//// 表示サイズを指定
+	//node->setContentSize(Size(500, 500));
+	//this->addChild(node, 1);
+
+
+
+	//3Dモデル***************************************************************************************
+	m_pSprite3D = Sprite3D::create("orc/orc.c3t");
+	m_pSprite3D->setPosition(640, 360);
+	m_pSprite3D->setScale(10.0f);
+	m_pSprite3D->setRotation3D(Vec3(0, 180, 0));
+	this->addChild(m_pSprite3D, 1);
+
+
+	Animation3D*animation = Animation3D::create("orc/orc.c3t");
+	Animate3D*animate = Animate3D::create(animation);
+	RepeatForever*repeatForever = RepeatForever::create(animate);
+	//アクション実行
+	m_pSprite3D->runAction(repeatForever);
+
+
+
+
 
 	RotateBy* action = RotateBy::create(10, 360 * 10);
 	//node->runAction(action);
@@ -99,7 +119,14 @@ bool HelloShader::init()
 
 void HelloShader::menuCloseCallback(Ref* pSender)
 {
-	Director::getInstance()->end();
+	//Director::getInstance()->end();
+	m_pSprite3D->stopAllActions();
+
+	Animation3D*animation = Animation3D::create("orc/orc_jump.c3t");
+	Animate3D*animate = Animate3D::create(animation);
+	RepeatForever*repeatForever = RepeatForever::create(animate);
+	//アクション実行
+	m_pSprite3D->runAction(animate);
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 	exit(0);
@@ -109,13 +136,15 @@ void HelloShader::menuCloseCallback(Ref* pSender)
 bool HelloShader::onTouchBegan(Touch* touch, Event*)
 {
 	//node->setPosition(touch->getLocation());
-
+	m_pSprite3D->setPosition(touch->getLocation());
 	return true;
 }
 
 void HelloShader::onTouchMoved(Touch* touch, Event*)
 {
 	//node->setPosition(touch->getLocation());
+
+	m_pSprite3D->setPosition(touch->getLocation());
 
 }
 

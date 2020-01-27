@@ -31,25 +31,25 @@ bool ShaderNode::init()
 	GLenum error;
 
 	m_pProgram = new GLProgram;
-	m_pProgram->initWithFilenames("shaders/flower.vsh", "shaders/flower.fsh");
+	m_pProgram->initWithFilenames("shaders/dynamic_light.vsh", "shaders/dynamic_light.fsh");
 
 	m_pProgram->bindAttribLocation("a_position", GLProgram::VERTEX_ATTRIB_POSITION);
 	m_pProgram->bindAttribLocation("a_color", GLProgram::VERTEX_ATTRIB_COLOR);
-	//m_pProgram->bindAttribLocation("a_texCoord", GLProgram::VERTEX_ATTRIB_TEX_COORD);
+	m_pProgram->bindAttribLocation("a_texCoord", GLProgram::VERTEX_ATTRIB_TEX_COORD);
 
 	m_pProgram->link();
 
 	m_pProgram->updateUniforms();
 
+	//uniform変数の番号を取得
+	uniform_sampler = glGetUniformLocation(m_pProgram->getProgram(), "sampler");
 	uniform_wvp_matrix = glGetUniformLocation(m_pProgram->getProgram(), "u_wvp_matrix");
 	uniform_center = glGetUniformLocation(m_pProgram->getProgram(), "center");
 	uniform_size = glGetUniformLocation(m_pProgram->getProgram(), "u_size");
-
 	uniform_time= glGetUniformLocation(m_pProgram->getProgram(), "time");
-
-	//uniform_sampler = glGetUniformLocation(m_pProgram->getProgram(), "sampler");
-
+	//テクスチャ読み込み
 	m_pTexture = Director::getInstance()->getTextureCache()->addImage("texture.jpg");
+	
 
 	// 背景色の指定
 	Director::getInstance()->setClearColor(Color4F(0.0f, 0.0f, 0.0f, 0));
@@ -87,6 +87,14 @@ void ShaderNode::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 	m_uv[2] = Vec2(1, 1);
 	m_uv[3] = Vec2(1, 0);
 
+	glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_POSITION, 3, GL_FLOAT, GL_FALSE, 0, m_pos);
+	glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_COLOR, 4, GL_FLOAT, GL_FALSE, 0, m_color);
+	glVertexAttribPointer(GLProgram::VERTEX_ATTRIB_TEX_COORD, 2, GL_FLOAT, GL_FALSE, 0, m_uv);
+
+	// 指定したuniform変数にテクスチャを関連付ける
+	glUniform1i(uniform_sampler, 0);
+	GL::bindTexture2D(m_pTexture->getName());
+
 	// ワールドビュープロジェクション行列の生成
 	Mat4 matProjection;
 
@@ -109,8 +117,8 @@ void ShaderNode::onDraw(const Mat4& transform, uint32_t /*flags*/)
 	//加算
 	//GL::blendFunc(GL_ONE, GL_ONE);
 
-	//GL::enableVertexAttribs(GL::VERTEX_ATTRIB_FLAG_POSITION | GL::VERTEX_ATTRIB_FLAG_COLOR | GL::VERTEX_ATTRIB_FLAG_TEX_COORD);
-	GL::enableVertexAttribs(GL::VERTEX_ATTRIB_FLAG_POSITION | GL::VERTEX_ATTRIB_FLAG_COLOR);
+	GL::enableVertexAttribs(GL::VERTEX_ATTRIB_FLAG_POSITION | GL::VERTEX_ATTRIB_FLAG_COLOR | GL::VERTEX_ATTRIB_FLAG_TEX_COORD);
+	//GL::enableVertexAttribs(GL::VERTEX_ATTRIB_FLAG_POSITION | GL::VERTEX_ATTRIB_FLAG_COLOR);
 
 	m_pProgram->use();
 

@@ -43,5 +43,9 @@
   <ItemGroup>
     <None Include="..\Resources\shaders\flower.fsh" />
     <None Include="..\Resources\shaders\flower.vsh" />
+    <None Include="..\Resources\shaders\dynamic_light.fsh" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="..\Resources\shaders\dynamic_light.vsh" />
   </ItemGroup>
 </Project>
