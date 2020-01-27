@@ -85,18 +85,18 @@ bool HelloShader::init()
 
 
 	//3Dモデル***************************************************************************************
-	m_pSprite3D = Sprite3D::create("orc/orc.c3t");
+	m_pSprite3D = Sprite3D::create("knight/knight.c3t");
 	m_pSprite3D->setPosition(640, 360);
-	m_pSprite3D->setScale(10.0f);
-	m_pSprite3D->setRotation3D(Vec3(0, 180, 0));
+	m_pSprite3D->setScale(3.0f);
+	m_pSprite3D->setRotation3D(Vec3(0, 0, 0));
 	this->addChild(m_pSprite3D, 1);
 
 
-	Animation3D*animation = Animation3D::create("orc/orc.c3t");
-	Animate3D*animate = Animate3D::create(animation);
-	RepeatForever*repeatForever = RepeatForever::create(animate);
-	//アクション実行
-	m_pSprite3D->runAction(repeatForever);
+	//Animation3D*animation = Animation3D::create("orc/orc.c3t");
+	//Animate3D*animate = Animate3D::create(animation);
+	//RepeatForever*repeatForever = RepeatForever::create(animate);
+	////アクション実行
+	//m_pSprite3D->runAction(repeatForever);
 
 
 

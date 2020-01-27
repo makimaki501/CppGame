@@ -52,7 +52,7 @@ bool ShaderNode::init()
 	
 
 	// ”wŒiF‚ÌŽw’è
-	Director::getInstance()->setClearColor(Color4F(0.0f, 0.0f, 0.0f, 0));
+	Director::getInstance()->setClearColor(Color4F(255.0f, 255.0f, 255.0f, 1));
 
 	counter = 0;
 
